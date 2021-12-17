@@ -1,0 +1,22 @@
+# VCS and IDE
+/*.sqbpro
+/.git
+/.vscode
+
+# PDM related
+/pdm.lock
+/.pdm.toml
+/__pypackages__/
+
+# Test related
+/.tox/
+/.pytest_cache/
+
+# Other generated files
+/build
+/dist
+/.tox
+/.venv
+/.eggs
+**/__pycache__
+**/*.sqlite3
