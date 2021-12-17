@@ -32,10 +32,6 @@ test = [
     "tox-pdm ~= 0.3",
     "pytest",
 ]
-build = [
-    "pdm-pep517 ~= 0.9",
-]
-
 
 [tool.pdm]
 version = {use_scm = true}
@@ -45,6 +41,7 @@ includes = [
 excludes = ["**/*.bak"]
 source-includes = [
     "_buildtool/",
+    "tests/",
     "raw_data/",
     "README.rst",
 ]

@@ -1,0 +1,27 @@
+name: Python Testing
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }} and PDM
+      uses: pdm-project/setup-pdm@v2.5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install tox-pdm tox-gh-actions pytest
+    - name: PDM build package
+      run: |
+        pdm build -v
+    - name: Test with tox
+      run: |
+        tox

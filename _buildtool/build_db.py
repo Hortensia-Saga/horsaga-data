@@ -156,7 +156,7 @@ def build(*, backup: bool = False):
             con.execute(create_st)
 
         raw_data_file = RAW_DATA_DIR / f'{table}.csv'
-        with con, open(raw_data_file, mode='r', newline='') as file:
+        with con, open(raw_data_file, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
             row_size = len(next(reader))
             insert_st = 'INSERT INTO "{}" VALUES ({})'.format(
