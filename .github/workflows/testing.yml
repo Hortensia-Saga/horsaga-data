@@ -9,19 +9,37 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-2019, macos-10.15]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ['3.8', '3.9', '3.10']
     steps:
+
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }} and PDM
       uses: pdm-project/setup-pdm@v2.5
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
-      run: |
-        pip install tox-pdm tox-gh-actions pytest
+      run: pip install -v tox-pdm tox-gh-actions pytest wheel
+
     - name: PDM build package
-      run: |
-        pdm build -v
+      run: pdm build -v
+
+    - name: Upload artifact
+      if: ${{ contains(matrix.os, 'ubuntu') && matrix.python-version == '3.8' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheel
+        path: dist/*.whl
+        if-no-files-found: error
+
+    - name: Install built wheel
+      if: ${{ ! contains(matrix.os, 'windows') }}
+      run: pip install -v dist/*.whl
+
+    - name: Install built wheel -- Windows
+      if: ${{ contains(matrix.os, 'windows') }}
+      run: pip install -v $(Get-ChildItem dist/*.whl)
+
     - name: Test with tox
-      run: |
-        tox
+      run: tox -v

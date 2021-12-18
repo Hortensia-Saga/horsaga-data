@@ -35,10 +35,13 @@ test = [
 
 [tool.pdm]
 version = {use_scm = true}
-includes = [
-    "src",
+# horsaga/__init__.py in this module is present only for aiding IDEs
+# to discover extra source (e.g. editable install). It is the job of
+# main horsaga module to distribute __init__.py.
+excludes = [
+    "**/*.bak",
+    "src/horsaga/__init__.py",
 ]
-excludes = ["**/*.bak"]
 source-includes = [
     "_buildtool/",
     "tests/",
