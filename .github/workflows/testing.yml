@@ -20,26 +20,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
-      run: pip install -v tox-pdm tox-gh-actions pytest wheel
+      run: pip install -v tox-gh-actions tox-wheel
 
-    - name: PDM build package
-      run: pdm build -v
+    - name: Test with tox
+      run: tox -v
 
     - name: Upload artifact
       if: ${{ contains(matrix.os, 'ubuntu') && matrix.python-version == '3.8' }}
       uses: actions/upload-artifact@v2
       with:
         name: wheel
-        path: dist/*.whl
+        path: .tox/dist/*.whl
         if-no-files-found: error
-
-    - name: Install built wheel
-      if: ${{ ! contains(matrix.os, 'windows') }}
-      run: pip install -v dist/*.whl
-
-    - name: Install built wheel -- Windows
-      if: ${{ contains(matrix.os, 'windows') }}
-      run: pip install -v $(Get-ChildItem dist/*.whl)
-
-    - name: Test with tox
-      run: tox -v
