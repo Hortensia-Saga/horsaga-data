@@ -1,8 +1,12 @@
-=======
-Purpose
-=======
+============
+horsaga.data
+============
 
-Exports Hortensia Saga card data and other constants as python data.
+.. raw:: html
+
+    <img src="https://github.com/Hortensia-Saga/horsaga-data/actions/workflows/testing.yml/badge.svg" alt="Testing workflow badge" />
+
+Exports Hortensia Saga card data and other constants as python structure.
 
 Dependencies
 ************
