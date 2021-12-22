@@ -9,15 +9,10 @@ from typing import TYPE_CHECKING
 from ._base import horsaga_db
 from ._utils import EnumMultiValueMixin, EnumRegexMixin
 
-# Out of 5 fields (value, code, kanji, color, combined),
-# 'code' is taken as the enum name
 _table = 'attack_attrib'
-_name_pos = 1
-
 _field_names = [row[0]
     for row in horsaga_db.execute(
         f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')]
-_field_names.pop(_name_pos)
 _fields = namedtuple('_AtkAttr_Fields', _field_names)
 
 class AtkAttr(EnumMultiValueMixin, EnumRegexMixin, _fields, enum.Enum):
@@ -26,8 +21,10 @@ class AtkAttr(EnumMultiValueMixin, EnumRegexMixin, _fields, enum.Enum):
     _ignore_ = ['AtkAttr', 'row']
 
     AtkAttr = vars()
+    # Out of 5 fields (value, code, kanji, color, combined),
+    # 'code' is taken as the enum name
     for row in horsaga_db.execute(f'SELECT * FROM {_table}'):
-        AtkAttr[row[_name_pos]] = row[0:_name_pos] + row[(_name_pos+1):]
+        AtkAttr[row['code']] = tuple(row)
 
     if TYPE_CHECKING:
         @property
