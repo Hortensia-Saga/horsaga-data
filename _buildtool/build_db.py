@@ -163,10 +163,6 @@ def build(*, backup: bool = False):
                 table,
                 ', '.join(['?'] * row_size))
 
-            # another iterator for data retrieval
-            del reader
-            file.seek(0)
-            reader = csv.reader(file)
             for row in reader:
                 # csv reader produce string-only result, need conversion
                 fixed_row = []

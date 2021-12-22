@@ -1,3 +1,4 @@
+id,name,desc,code,tp_cost
 10101,ヒール,生存ユニットのHPを小回復,HP_CURE,20
 10102,ヒール／真,生存ユニットのHPを中回復,HP_CURE,20
 10103,ヒール／絶,生存ユニットのHPを大回復,HP_CURE,20
