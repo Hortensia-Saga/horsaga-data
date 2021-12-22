@@ -1,6 +1,8 @@
 [build-system]
 requires = ["pdm-pep517"]
-build-backend = "pdm_pep517_adapter:api" # can be dropped after PDM 1.14
+# Can't get PDM custom build step to include the DB file,
+# so this build backend wrapping would stay in foreseeable future
+build-backend = "pdm_pep517_adapter:api"
 backend-path = ["_buildtool"]
 
 [project]
@@ -28,10 +30,7 @@ homepage = "https://github.com/Hortensia-Saga/horsaga.data"
 Source = "https://github.com/Hortensia-Saga/horsaga.data"
 
 [project.optional-dependencies]
-test = [
-    "tox-pdm ~= 0.3",
-    "pytest",
-]
+test = ["tox"]
 
 [tool.pdm]
 version = {use_scm = true}
@@ -54,8 +53,12 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+# Package explicitly listed so that PDM frontend won't try
+# to prune my personal working environment, and then does
+# the final firework of self-destruction (removes itself!)
 [tool.pdm.dev-dependencies]
-extra = [
+personal = [
+    "pdm",
     "ptpython",
     "rstcheck",
     "snooty-lextudio",

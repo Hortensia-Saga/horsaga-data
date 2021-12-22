@@ -9,8 +9,19 @@ Dependencies
 
 - All data stored in `SQLite`_ database.
 - Uses `Attrs`_ for class structure.
-- Building and dependency management handled by `PDM`_.
+- Utilize `PDM`_ as PEP 517 build backend.
+- `Tox`_ for test automation.
+
+Usage
+*****
+
+``import horsaga.data``
+
+Simple as that. In particular, a Sqlite3 connection object
+``horsaga_db`` is exported so that one can do custom read-only access
+to database. Read-write access is not planned for now.
 
 .. _SQLite: https://www.sqlite.org/
 .. _Attrs: https://www.attrs.org/
 .. _PDM: https://pdm.fming.dev/
+.. _Tox: https://tox.wiki/
