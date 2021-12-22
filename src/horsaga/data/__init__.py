@@ -8,6 +8,7 @@ from ._base       import horsaga_db
 from ._attrib     import AtkAttr
 from ._rarity     import Rarity
 from ._speed      import SpeedRank
+from ._partyrank  import PartyRank
 
 # models
 from ._enchant    import Enchant

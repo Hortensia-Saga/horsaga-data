@@ -9,10 +9,8 @@ from typing import TYPE_CHECKING
 from ._base import horsaga_db
 from ._utils import EnumMultiValueMixin
 
-_table = 'speed'
-_field_names = [row[0]
-    for row in horsaga_db.execute(
-        f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')]
+_table = 'rank'
+_field_names = ('value', 'code')
 _fields = namedtuple('_SpeedRank_Fields', _field_names)
 
 class SpeedRank(EnumMultiValueMixin, _fields, enum.Enum):
@@ -24,7 +22,7 @@ class SpeedRank(EnumMultiValueMixin, _fields, enum.Enum):
     _rank_tr = str.maketrans('+-', 'PM')
 
     SpeedRank = vars()
-    for row in horsaga_db.execute(f'SELECT value, code FROM {_table}'):
+    for row in horsaga_db.execute(f'SELECT {",".join(_field_names)} FROM {_table}'):
         SpeedRank[row['code'].translate(_rank_tr)] = tuple(row)
 
     if TYPE_CHECKING:

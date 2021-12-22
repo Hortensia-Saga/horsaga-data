@@ -21,3 +21,9 @@ def test_speed_roundtrip():
     e = choice(list(SpeedRank))
     for v in e._value_:
         assert SpeedRank(v) == e
+
+def test_partyrank_roundtrip():
+    from horsaga.data import PartyRank
+    e = choice(list(PartyRank))
+    for v in e._value_[:2]:
+        assert PartyRank(v) == e

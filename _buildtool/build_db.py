@@ -12,7 +12,7 @@ PROJ_TOP = Path(__file__).parents[1]
 SRC_DIR = PROJ_TOP / 'src' / 'horsaga' / 'data'
 RAW_DATA_DIR = PROJ_TOP / 'raw_data'
 
-structure = {
+db_schema = {
     'attack_attrib': '''
         "value"     INTEGER,
         "code"      TEXT,
@@ -58,9 +58,13 @@ structure = {
         "desc"  TEXT NOT NULL,
         PRIMARY KEY("id")
     ''',
-    'speed': '''
-        "value"  INTEGER,
-        "code"   TEXT NOT NULL UNIQUE,
+    'rank': '''
+        "value"      INTEGER,
+        "code"       TEXT NOT NULL UNIQUE,
+        "min_hp"     INTEGER,
+        "min_atk"    INTEGER,
+        "min_def"    INTEGER,
+        "min_speed"  INTEGER,
         PRIMARY KEY("value")
     ''',
     'tactic': '''
@@ -140,27 +144,17 @@ def build(*, backup: bool = False):
     con.execute('PRAGMA foreign_keys = 1;')
 
     # Note: table order matters, some have foreign key constraints
-    for table in [
-        'attack_attrib',
-        'awaken_gain',
-        'enchant',
-        'rarity',
-        'skill',
-        'speed',
-        'tactic',
-        'chara',
-        'cardbase',
-    ]:
+    for tbl_name, tbl_struct in db_schema.items():
         with con:
-            create_st = f'CREATE TABLE "{table}" ({structure[table]})'
+            create_st = f'CREATE TABLE "{tbl_name}" ({tbl_struct})'
             con.execute(create_st)
 
-        raw_data_file = RAW_DATA_DIR / f'{table}.csv'
+        raw_data_file = RAW_DATA_DIR / f'{tbl_name}.csv'
         with con, open(raw_data_file, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
             row_size = len(next(reader))
             insert_st = 'INSERT INTO "{}" VALUES ({})'.format(
-                table,
+                tbl_name,
                 ', '.join(['?'] * row_size))
 
             for row in reader:
@@ -184,7 +178,7 @@ def build(*, backup: bool = False):
             # Special fake character IDs, many cards still don't have
             # corresponding character data discovered yet. Hopefully
             # this section can be removed in future
-            if table == 'chara':
+            if tbl_name == 'chara':
                 data = [(i*1000, '', i) for i in range(1, 5)]
                 con.executemany('INSERT INTO "chara" (id, name, attr) VALUES (?, ?, ?)', data)
 
