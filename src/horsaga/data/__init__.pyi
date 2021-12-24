@@ -11,7 +11,6 @@ from typing import (
     overload,
 )
 import sqlite3
-import enum
 import attr
 
 _T = TypeVar('_T')
@@ -30,46 +29,6 @@ class EnumRegexMixin:
 # in reverse enum lookup argument.
 class EnumMultiValueMixin:
     pass
-
-class AtkAttr(EnumRegexMixin, enum.Enum):
-    @property
-    def value(self) -> int: ...
-    @property
-    def code(self) -> str: ...
-    @property
-    def kanji(self) -> str: ...
-    @property
-    def color(self) -> str: ...
-    @property
-    def combined(self) -> str: ...
-
-class Rarity(enum.Enum):
-    @property
-    def value(self) -> int: ...
-    @property
-    def code(self) -> str: ...
-    @property
-    def full_name(self) -> str: ...
-
-class SpeedRank(enum.Enum):
-    @property
-    def value(self) -> int: ...
-    @property
-    def code(self) -> str: ...
-
-class PartyRank(enum.Enum):
-    @property
-    def value(self) -> int: ...
-    @property
-    def code(self) -> str: ...
-    @property
-    def min_hp(self) -> int: ...
-    @property
-    def min_atk(self) -> int: ...
-    @property
-    def min_def(self) -> int: ...
-    @property
-    def min_speed(self) -> int: ...
 
 @attr.s
 class Enchant:
@@ -142,3 +101,11 @@ class CardBase:
     kn_skill: Skill
     @classmethod
     def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+
+
+from ._enum_members import (
+    AtkAttr as AtkAttr,
+    Rarity as Rarity,
+    SpeedRank as SpeedRank,
+    PartyRank as PartyRank,
+)

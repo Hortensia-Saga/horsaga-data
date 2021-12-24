@@ -12,6 +12,10 @@
 /.tox/
 /.pytest_cache/
 
+# Generated data file and source
+**/*.sqlite3
+/src/horsaga/data/_enum_members.pyi
+
 # Other generated files
 /build
 /dist
@@ -19,4 +23,3 @@
 /.venv
 /.eggs
 **/__pycache__
-**/*.sqlite3
