@@ -7,6 +7,7 @@ from typing import (
     Optional,
     Pattern,
     Tuple,
+    Type,
     TypeVar,
     overload,
 )
@@ -36,10 +37,10 @@ class Enchant:
     name: str
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: str) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> List[_T]: ...
 
 @attr.s
 class Skill:
@@ -49,13 +50,13 @@ class Skill:
     desc: str
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: str) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: Pattern) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: Pattern) -> List[_T]: ...
 
 @attr.s
 class Tactic:
@@ -66,13 +67,13 @@ class Tactic:
     tp_cost: int
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: str) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: _T, lookup_arg: Pattern) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: Pattern) -> List[_T]: ...
 
 @attr.s
 class Character:
@@ -80,7 +81,7 @@ class Character:
     name: str
     attr: AtkAttr
     @classmethod
-    def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
 @attr.s
 class CardBase:
@@ -100,7 +101,7 @@ class CardBase:
     enchant: Enchant
     kn_skill: Skill
     @classmethod
-    def lookup(cls: _T, lookup_arg: int) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
 
 from ._enum_members import (

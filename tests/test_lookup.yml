@@ -1,0 +1,62 @@
+- case: enchant-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.Enchant*, None]
+    - arg_type: str
+      rt: builtins.list[horsaga.data.Enchant*]
+  main: |
+    from horsaga.data import Enchant
+    arg: {{ arg_type }}
+    result = Enchant.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
+- case: skill-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.Skill*, None]
+    - arg_type: str
+      rt: Union[horsaga.data.Skill*, None]
+    - arg_type: re.Pattern
+      rt: builtins.list[horsaga.data.Skill*]
+  main: |
+    import re
+    from horsaga.data import Skill
+    arg: {{ arg_type }}
+    result = Skill.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
+- case: tactic-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.Tactic*, None]
+    - arg_type: str
+      rt: Union[horsaga.data.Tactic*, None]
+    - arg_type: re.Pattern
+      rt: builtins.list[horsaga.data.Tactic*]
+  main: |
+    import re
+    from horsaga.data import Tactic
+    arg: {{ arg_type }}
+    result = Tactic.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
+- case: character-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.Character*, None]
+  main: |
+    from horsaga.data import Character
+    arg: {{ arg_type }}
+    result = Character.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
+- case: card-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.CardBase*, None]
+  main: |
+    from horsaga.data import CardBase
+    arg: {{ arg_type }}
+    result = CardBase.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
