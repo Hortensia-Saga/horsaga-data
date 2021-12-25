@@ -14,7 +14,8 @@ class EnumRegexMixin(enum.Enum):
     def alternation_re(cls, attr: str = 'value') -> str:
         """Create alternation regex ``foo|bar`` from enum members"""
 
-        return '|'.join(re.escape(getattr(e, attr)) for e in list(cls))
+        values = [getattr(e, attr) for e in list(cls)]
+        return '|'.join(re.escape(v) for v in values if isinstance(v, str) and len(v))
 
     @classmethod
     def char_class_re(cls, attr: str = 'value') -> str:
@@ -26,17 +27,16 @@ class EnumRegexMixin(enum.Enum):
             When attribute of any member has string length > 1
         """
 
+        values = []
         for e in list(cls):
-            if len(getattr(e, attr)) <= 1:
+            if not (v := getattr(e, attr)) or not isinstance(v, str):
                 continue
-            raise ValueError(f'Attribute "{attr}" '
-                f'of member {e!r} contains multiple char')
+            if len(v) != 1:
+                raise ValueError(f'Attribute "{attr}" '
+                    f'of member {e!r} contains multiple char')
+            values.append(v)
 
-        return (
-            '[' +
-            "".join(re.escape(getattr(e, attr)) for e in list(cls)) +
-            ']'
-        )
+        return ('[{}]'.format("".join(re.escape(v) for v in values)))
 
 
 # The downside for this approach is, type checkers may expect enum value

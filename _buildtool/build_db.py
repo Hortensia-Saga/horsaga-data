@@ -13,7 +13,7 @@ DB_BACKUP_NAME = DB_FILE_NAME + '.bak'
 db_schema = {
     'attack_attrib': '''
         "value"     INTEGER,
-        "code"      TEXT,
+        "code"      TEXT NOT NULL,
         "kanji"     TEXT,
         "color"     TEXT,
         "combined"  TEXT,
