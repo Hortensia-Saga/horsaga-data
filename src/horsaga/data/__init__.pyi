@@ -11,6 +11,7 @@ from typing import (
     TypeVar,
     overload,
 )
+import enum
 import sqlite3
 import attr
 
@@ -83,6 +84,11 @@ class Character:
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
+class CardBaseFlag(enum.Flag):
+    NONE = ...
+    HERO = ...
+    DUMMY = ...
+
 @attr.s
 class CardBase:
     id: int
@@ -94,7 +100,7 @@ class CardBase:
     bp: int
     rare: Rarity
     chara: Character
-    flag: int
+    flag: CardBaseFlag
     skill: Skill
     uf: Skill
     tactic: Tuple[Tactic, ...]

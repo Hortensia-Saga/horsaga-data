@@ -5,8 +5,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Dict, Tuple
-import attr
+import enum
 import functools
+import attr
 
 from ._base import horsaga_db
 from ._speed import SpeedRank
@@ -15,6 +16,16 @@ from ._character import Character
 from ._skill import Skill
 from ._tactic import Tactic
 from ._enchant import Enchant
+
+class CardBaseFlag(enum.Flag):
+    NONE = 0
+    HERO = 1
+    DUMMY = 2
+
+    def __repr__(self) -> str:
+        return f'<{type(self).__name__}.{self._name_}>'
+
+CardBaseFlag.__module__ = __spec__.parent
 
 @attr.s(slots=True, auto_attribs=True)
 class CardBase:
@@ -29,7 +40,7 @@ class CardBase:
     rare: Rarity = attr.field(converter=Rarity)
     chara: Character = attr.field(
         converter=lambda x: None if x is None else Character.lookup(x))
-    flag: int # TODO convert to useful enum flags
+    flag: CardBaseFlag = attr.field(converter=CardBaseFlag)
     skill: Skill = attr.field(
         converter=lambda x: None if x is None else Skill.lookup(x))
     uf: Skill = attr.field(
@@ -39,6 +50,9 @@ class CardBase:
         converter=lambda x: None if x is None else Enchant.lookup(x))
     kn_skill: Skill = attr.field(
         converter=lambda x: None if x is None else Skill.lookup(x))
+
+    def __str__(self) -> str:
+        return (f'<{type(self).__name__} {self.id} ({self.title})>')
 
     def __attrs_post_init__(self):
         type(self)._cache[self.id] = self
