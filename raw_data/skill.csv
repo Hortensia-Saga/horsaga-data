@@ -645,3 +645,4 @@ id,code,name,desc
 164103,RANDOM_ATTACK6_AT_DF_IGNORED,聖王の威光,敵の防御力を無視してﾗﾝﾀﾞﾑで6連続攻撃[中]
 2000101,START_AT_UP,剛撃の真髄,常に自分の攻撃力をUP[小]
 2000201,START_DF_UP,頑強の真髄,常に自分の防御力をUP[小]
+2010101,GB_GAIN_TP_UP,技巧の真髄,【騎士団戦】攻撃時に獲得するTPをUP[小]
