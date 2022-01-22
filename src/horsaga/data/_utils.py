@@ -2,8 +2,10 @@
 # Utility classes and functions
 #
 
+from collections import defaultdict
 import enum
 import re
+from typing import Iterable
 
 class EnumRegexMixin(enum.Enum):
     """Mixin class allowing a enum class to compose alternation
@@ -39,19 +41,61 @@ class EnumRegexMixin(enum.Enum):
         return ('[{}]'.format("".join(re.escape(v) for v in values)))
 
 
-# The downside for this approach is, type checkers may expect enum value
-# reverse lookup to take the full mix-in type fields as argument. For example:
-#     class MyType(NamedTuple):
-#         desc: str
-#         alias: str
-#     class MyEnum(EnumMutiValueMixin, MyType, Enum):
-#         ITEM1: 'FooBar', 'stock1'
-# We want MyEnum('FooBar') == MyEnum('stock1') == MyEnum.ITEM1,
-# but pyright currently expects signature MyEnum(('FooBar', 'stock1'))
-# Therefore in the end something still needs to be type ignored.
 class EnumMultiValueMixin(enum.Enum):
-    """Mixin for emulating aenum.MultiValueEnum without aenum module"""
+    """Mixin for emulating :class:`aenum.MultiValueEnum` without aenum module
+
+    When using this mixin class, the mixin type of enum must be namedtuple
+    (each tuple item can be accessed as attribute from enum member).
+
+    Notes
+    -----
+    Two mutually exclusive keyword arguments are available during
+    enum construction:
+
+    lookup_enable: Iterable[str], optional
+        List of attribute names to whitelist when constructing reverse lookup
+        dict. Only those values under specified attributes are searchable.
+
+    lookup_disable: Iterable[str], optional
+        List of attribute names to ignore when constructing reverse lookup dict.
+        Lookup of values from these attributes would result in exception.
+
+    Once these arguments are used, Python 3.9.2+ becomes a hard requirement;
+    otherwise python version restriction does not apply.
+    """
+    def __init_subclass__(
+        cls, /,
+        lookup_enable: Iterable[str] = None,
+        lookup_disable: Iterable[str] = None,
+        **kwds
+    ) -> None:
+        super().__init_subclass__(**kwds)
+        lookup_enable = set(lookup_enable) if lookup_enable else set()
+        lookup_disable = set(lookup_disable) if lookup_disable else set()
+        if len(lookup_enable):
+            if len(lookup_disable):
+                raise ValueError('lookup_enable and lookup_disable '
+                    'must not be used together')
+            lookup_dict = defaultdict(lambda: False)
+            for fname in lookup_enable:
+                lookup_dict[fname] = True
+        else:
+            lookup_dict = defaultdict(lambda: True)
+            for fname in lookup_disable:
+                lookup_dict[fname] = False
+        cls._field_in_lookup = lookup_dict
+
+
     def __init__(self, *args):
         super().__init__()
-        for arg in args:
-            type(self)._value2member_map_[arg] = self
+        if getattr(type(self), '_field_in_lookup', None) is None:
+            # Py < 3.9.2, where __init_subclass__ is not called
+            for arg in args:
+                type(self)._value2member_map_[arg] = self
+            return
+        me = self._value_._asdict()
+        in_lookup = type(self)._field_in_lookup
+        accepted_vals = [v for k, v in me.items()
+            if in_lookup[k]]
+        for v in accepted_vals:
+            type(self)._value2member_map_[v] = self
