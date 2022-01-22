@@ -1,6 +1,8 @@
-import pytest
 import csv
 from pathlib import Path
+
+import pytest
+
 
 @pytest.fixture
 def gacha_data():

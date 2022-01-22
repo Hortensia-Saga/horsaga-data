@@ -3,13 +3,15 @@
 #
 
 from __future__ import annotations
+
+import functools
 from typing import ClassVar, Dict
 
 import attr
-import functools
 
-from ._base import horsaga_db
 from ._attrib import AtkAttr
+from ._base import horsaga_db
+
 
 @attr.s(slots=True, auto_attribs=True)
 class Character:

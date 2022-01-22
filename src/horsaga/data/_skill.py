@@ -4,12 +4,14 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, Dict
-import attr
 import functools
 import re
+from typing import ClassVar, Dict
+
+import attr
 
 from ._base import horsaga_db
+
 
 @attr.s(frozen=True, auto_attribs=True)
 class Skill:

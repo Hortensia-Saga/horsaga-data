@@ -4,6 +4,7 @@
 
 from horsaga.data import CardBase
 
+
 def test_comparedata(gacha_data):
     ids_from_db = {i for i in CardBase._cache.keys() if i < 5000}
     assert ids_from_db == gacha_data.keys()

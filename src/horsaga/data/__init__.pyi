@@ -2,17 +2,10 @@
 # Type stub for horsaga-data
 #
 
-from typing import (
-    List,
-    Optional,
-    Pattern,
-    Tuple,
-    Type,
-    TypeVar,
-    overload,
-)
 import enum
 import sqlite3
+from typing import List, Optional, Pattern, Tuple, Type, TypeVar, overload
+
 import attr
 
 _T = TypeVar('_T')
@@ -109,10 +102,11 @@ class CardBase:
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
-
+# isort: off
 from ._enum_members import (
-    AtkAttr as AtkAttr,
-    Rarity as Rarity,
-    SpeedRank as SpeedRank,
+    AtkAttr   as AtkAttr,
+    Rarity    as Rarity,
     PartyRank as PartyRank,
+    SpeedRank as SpeedRank,
 )
+# isort: on

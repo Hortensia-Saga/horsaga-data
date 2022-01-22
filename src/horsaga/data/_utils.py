@@ -2,10 +2,11 @@
 # Utility classes and functions
 #
 
-from collections import defaultdict
 import enum
 import re
+from collections import defaultdict
 from typing import Iterable
+
 
 class EnumRegexMixin(enum.Enum):
     """Mixin class allowing a enum class to compose alternation

@@ -4,12 +4,14 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, Dict
-import attr
 import functools
 import re
+from typing import ClassVar, Dict
+
+import attr
 
 from ._base import horsaga_db
+
 
 # FIXME ID may not be unique if Old Amulet Tactics are included
 # A bunch of tactics would be available in alternative form in

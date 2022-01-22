@@ -4,18 +4,20 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, Dict, Tuple
 import enum
 import functools
+from typing import ClassVar, Dict, Tuple
+
 import attr
 
 from ._base import horsaga_db
-from ._speed import SpeedRank
-from ._rarity import Rarity
 from ._character import Character
-from ._skill import Skill
-from ._tactic import Tactic
 from ._enchant import Enchant
+from ._rarity import Rarity
+from ._skill import Skill
+from ._speed import SpeedRank
+from ._tactic import Tactic
+
 
 class CardBaseFlag(enum.Flag):
     NONE = 0

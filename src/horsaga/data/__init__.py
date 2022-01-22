@@ -1,14 +1,16 @@
 #
 # Export Horsaga database
 #
+# isort: skip_file
+#
 
 from ._base       import horsaga_db
 
 # enums
 from ._attrib     import AtkAttr
 from ._rarity     import Rarity
-from ._speed      import SpeedRank
 from ._partyrank  import PartyRank
+from ._speed      import SpeedRank
 
 # models
 from ._enchant    import Enchant
