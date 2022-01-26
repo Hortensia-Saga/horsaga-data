@@ -43,6 +43,7 @@ excludes = [
 source-includes = [
     "_buildtool/",
     "README.rst",
+    "data_mining/",
     "raw_data/",
     "src/horsaga/__init__.py",
     "tests/",

@@ -4,7 +4,7 @@ horsaga.data
 
 .. raw:: html
 
-    <img src="https://github.com/Hortensia-Saga/horsaga-data/actions/workflows/testing.yml/badge.svg" alt="Testing workflow badge" />
+    <img src="https://github.com/Hortensia-Saga/horsaga-data/actions/workflows/all.yml/badge.svg" alt="Testing workflow badge" />
 
 Exports Hortensia Saga card data and other constants as python structure.
 
@@ -29,3 +29,10 @@ to database. Read-write access is not planned for now.
 .. _Attrs: https://www.attrs.org/
 .. _PDM: https://pdm.fming.dev/
 .. _Tox: https://tox.wiki/
+
+DB building
+***********
+
+Scripts used for mining card data are placed inside ``data_mining`` folder.
+They are only placed here for reference, as the scripts require proper setup
+of Hortensia Saga accounts and config, as well as the ``horsaga`` package.
