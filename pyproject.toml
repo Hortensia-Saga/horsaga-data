@@ -36,6 +36,7 @@ test = ["tox"]
 version = {use_scm = true}
 excludes = [
     "**/*.bak",
+    "data_mining/",
 ]
 # horsaga/__init__.py in this module is present only for discovering
 # module in tests or editable installs. It is the job of main
@@ -43,7 +44,6 @@ excludes = [
 source-includes = [
     "_buildtool/",
     "README.rst",
-    "data_mining/",
     "raw_data/",
     "src/horsaga/__init__.py",
     "tests/",
@@ -60,3 +60,6 @@ addopts = "-v"
 testpaths = [
     "tests",
 ]
+
+[tool.pyright]
+ignore = ["data_mining"]
