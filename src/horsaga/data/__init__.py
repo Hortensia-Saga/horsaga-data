@@ -14,6 +14,7 @@ from ._speed      import SpeedRank
 
 # models
 from ._enchant    import Enchant
+from ._formation  import Formation
 from ._skill      import Skill
 from ._tactic     import Tactic
 from ._character  import Character

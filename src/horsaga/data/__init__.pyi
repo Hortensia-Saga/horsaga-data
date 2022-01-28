@@ -37,6 +37,19 @@ class Enchant:
     def lookup(cls: Type[_T], lookup_arg: str) -> List[_T]: ...
 
 @attr.s
+class Formation:
+    id: int
+    name: str
+    desc: str
+    type: int
+    @overload
+    @classmethod
+    def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
+    @overload
+    @classmethod
+    def lookup(cls: Type[_T], lookup_arg: str) -> Optional[_T]: ...
+
+@attr.s
 class Skill:
     id: int
     code: str

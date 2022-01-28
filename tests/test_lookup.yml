@@ -10,6 +10,18 @@
     result = Enchant.lookup(arg)
     reveal_type(result)  # N: Revealed type is "{{ rt }}"
 
+- case: formation-lookup-annotation
+  parametrized:
+    - arg_type: int
+      rt: Union[horsaga.data.Formation*, None]
+    - arg_type: str
+      rt: Union[horsaga.data.Formation*, None]
+  main: |
+    from horsaga.data import Formation
+    arg: {{ arg_type }}
+    result = Formation.lookup(arg)
+    reveal_type(result)  # N: Revealed type is "{{ rt }}"
+
 - case: skill-lookup-annotation
   parametrized:
     - arg_type: int

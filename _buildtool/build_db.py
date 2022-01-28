@@ -49,6 +49,13 @@ db_schema = {
         "full_name"  TEXT    NOT NULL,
         PRIMARY KEY("value")
     ''',
+    'formation': '''
+        "id"         INTEGER NOT NULL,
+        "name"       TEXT    NOT NULL UNIQUE,
+        "desc"       TEXT    NOT NULL,
+        "type"       INTEGER NOT NULL,
+        PRIMARY KEY("id")
+    ''',
     'skill': '''
         "id"    INTEGER,
         "code"  TEXT,

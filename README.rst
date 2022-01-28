@@ -8,14 +8,6 @@ horsaga.data
 
 Exports Hortensia Saga card data and other constants as python structure.
 
-Dependencies
-************
-
-- All data stored in `SQLite`_ database.
-- Uses `Attrs`_ for class structure.
-- Utilize `PDM`_ as PEP 517 build backend.
-- `Tox`_ for test automation.
-
 Usage
 *****
 
