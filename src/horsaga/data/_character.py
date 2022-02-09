@@ -13,7 +13,7 @@ from ._attrib import AtkAttr
 from ._base import horsaga_db
 
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(slots=True, frozen=True, auto_attribs=True)
 class Character:
     """Character data shared (potentially) across multiple cards"""
     _cache: ClassVar[Dict[int, Character]] = {}
@@ -39,8 +39,5 @@ class Character:
 Character.__module__ = __spec__.parent
 
 
-def _populate():
-    for row in horsaga_db.execute('SELECT id, name, attr FROM chara'):
-        _ = Character(**row) # Accessible via Character.lookup()
-
-_populate()
+for row in horsaga_db.execute('SELECT id, name, attr FROM chara'):
+    _ = Character(**row) # Accessible via Character.lookup()

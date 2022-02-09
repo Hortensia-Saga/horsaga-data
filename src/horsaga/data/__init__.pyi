@@ -4,7 +4,7 @@
 
 import enum
 import sqlite3
-from typing import List, Optional, Pattern, Tuple, Type, TypeVar, overload
+from typing import Optional, Pattern, Type, TypeVar, overload
 
 import attr
 
@@ -34,7 +34,7 @@ class Enchant:
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: Type[_T], lookup_arg: str) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> frozenset[_T]: ...
 
 @attr.s
 class Formation:
@@ -60,10 +60,10 @@ class Skill:
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: Type[_T], lookup_arg: str) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> frozenset[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: Type[_T], lookup_arg: Pattern) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: Pattern) -> frozenset[_T]: ...
 
 @attr.s
 class Tactic:
@@ -77,10 +77,10 @@ class Tactic:
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: Type[_T], lookup_arg: str) -> Optional[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: str) -> frozenset[_T]: ...
     @overload
     @classmethod
-    def lookup(cls: Type[_T], lookup_arg: Pattern) -> List[_T]: ...
+    def lookup(cls: Type[_T], lookup_arg: Pattern) -> frozenset[_T]: ...
 
 @attr.s
 class Character:
@@ -109,7 +109,7 @@ class CardBase:
     flag: CardBaseFlag
     skill: Skill
     uf: Skill
-    tactic: Tuple[Tactic, ...]
+    tactic: tuple[Tactic, ...]
     enchant: Enchant
     kn_skill: Skill
     @classmethod

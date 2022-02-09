@@ -13,7 +13,7 @@ import attr
 from ._base import horsaga_db
 
 
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(slots=True, frozen=True, auto_attribs=True)
 class Skill:
     _cache: ClassVar[Dict[int, Skill]] = {}
     id: int
@@ -32,38 +32,35 @@ class Skill:
         raise TypeError(f'Lookup argument type {type(lookup_arg)} not supported')
 
     # BUG @register failed to read annotation from function signature
-    @lookup.register(int)
+    @lookup.register(int) # by exact ID
     @classmethod
-    def _(cls, lookup_arg: int): # search by ID
+    def _(cls, lookup_arg: int):
         return cls._cache.get(lookup_arg)
 
-    @lookup.register(str)
+    @lookup.register(str) # by exact name or code
     @classmethod
-    def _(cls, lookup_arg: str): # search by name
+    def _(cls, lookup_arg: str):
         resultset = [row[0] for row in horsaga_db.execute(
-            'SELECT id FROM skill WHERE name = ?', (lookup_arg,))]
-        # skill name guaranteed unique in DB schema
-        if len(resultset):
-            return cls._cache.get(resultset[0])
+            'SELECT id FROM skill WHERE name = ? OR code = ?',
+            (lookup_arg, lookup_arg))]
+        # though name is unique, code isn't
+        return frozenset(cls._cache.get(id) for id in resultset)
 
-    @lookup.register(re.Pattern)
+    @lookup.register(re.Pattern) # by name/desc/code regex
     @classmethod
-    def _(cls, lookup_arg: re.Pattern): # search by name/desc regex
-        # Python sqlite3 module does not support loadable extension,
-        # so sqlite3 regexp is unusable. We do search without SQL.
-        result = []
-        for skill_obj in cls._cache.values():
-            if (lookup_arg.search(skill_obj.name) or
-                lookup_arg.search(skill_obj.desc)):
-                result.append(skill_obj)
-        return result
+    def _(cls, lookup_arg: re.Pattern):
+        # Python sqlite3 module does not support loadable extension
+        # by default. Thus search without SQL -- a bit expensive though.
+        return frozenset(
+            obj for obj in cls._cache.values()
+            if (lookup_arg.search(obj.name) or
+                lookup_arg.search(obj.code or '') or # FIXME no code for ディアーブル・レヨン
+                lookup_arg.search(obj.desc))
+        )
 
 Skill.__module__ = __spec__.parent
 
 
-def _populate():
-    # TODO Think about replacing sqlite3 row_factory temporarily
-    for row in horsaga_db.execute('SELECT * FROM skill'):
-        _ = Skill(**row) # Accessible via Skill.lookup()
-
-_populate()
+# TODO Think about replacing sqlite3 row_factory temporarily
+for row in horsaga_db.execute('SELECT * FROM skill'):
+    _ = Skill(**row) # Accessible via Skill.lookup()

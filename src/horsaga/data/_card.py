@@ -29,7 +29,7 @@ class CardBaseFlag(enum.Flag):
 
 CardBaseFlag.__module__ = __spec__.parent
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(slots=True, frozen=True, auto_attribs=True)
 class CardBase:
     _cache: ClassVar[Dict[int, CardBase]] = {}
     id: int
@@ -73,17 +73,14 @@ class CardBase:
 CardBase.__module__ = __spec__.parent
 
 
-def _populate():
-    for row in horsaga_db.execute('SELECT * FROM cardbase'):
-        kwds = dict(row)
-        tactic_list = []
-        for key in ('tactic1', 'tactic2'):
-            if (tid := kwds.pop(key)):
-                tactic_list.append(Tactic.lookup(tid))
-        kwds['tactic'] = tuple(tactic_list)
-        _ = CardBase(**kwds)
-
-_populate()
+for row in horsaga_db.execute('SELECT * FROM cardbase'):
+    kwds = dict(row)
+    tactic_list = []
+    for key in ('tactic1', 'tactic2'):
+        if (tid := kwds.pop(key)):
+            tactic_list.append(Tactic.lookup(tid))
+    kwds['tactic'] = tuple(tactic_list)
+    _ = CardBase(**kwds)
 
 # TODO dummy card class for internal-only fake cards
 # some attribs (speed, chara, tactic etc) are totally useless

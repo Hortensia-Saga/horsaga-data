@@ -3,7 +3,7 @@
     - arg_type: int
       rt: Union[horsaga.data.Enchant*, None]
     - arg_type: str
-      rt: builtins.list[horsaga.data.Enchant*]
+      rt: builtins.frozenset[horsaga.data.Enchant*]
   main: |
     from horsaga.data import Enchant
     arg: {{ arg_type }}
@@ -27,9 +27,9 @@
     - arg_type: int
       rt: Union[horsaga.data.Skill*, None]
     - arg_type: str
-      rt: Union[horsaga.data.Skill*, None]
+      rt: builtins.frozenset[horsaga.data.Skill*]
     - arg_type: re.Pattern
-      rt: builtins.list[horsaga.data.Skill*]
+      rt: builtins.frozenset[horsaga.data.Skill*]
   main: |
     import re
     from horsaga.data import Skill
@@ -42,9 +42,9 @@
     - arg_type: int
       rt: Union[horsaga.data.Tactic*, None]
     - arg_type: str
-      rt: Union[horsaga.data.Tactic*, None]
+      rt: builtins.frozenset[horsaga.data.Tactic*]
     - arg_type: re.Pattern
-      rt: builtins.list[horsaga.data.Tactic*]
+      rt: builtins.frozenset[horsaga.data.Tactic*]
   main: |
     import re
     from horsaga.data import Tactic

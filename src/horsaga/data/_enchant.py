@@ -12,7 +12,7 @@ import attr
 from ._base import horsaga_db
 
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(slots=True, frozen=True, auto_attribs=True)
 class Enchant:
     """Enchant data"""
     _cache: ClassVar[Dict[int, Enchant]] = {}
@@ -28,27 +28,21 @@ class Enchant:
     def lookup(cls, lookup_arg):
         raise TypeError(f'Lookup argument type {type(lookup_arg)} not supported')
 
-    @lookup.register(int)
+    @lookup.register(int) # by ID
     @classmethod
-    def _(cls, lookup_arg: int): # search by ID
+    def _(cls, lookup_arg: int):
         return cls._cache.get(lookup_arg)
 
-    @lookup.register(str)
+    @lookup.register(str) # by name
     @classmethod
-    def _(cls, lookup_arg: str): # search by name
-        result = []
-        for row in horsaga_db.execute(
-            'SELECT id FROM enchant WHERE name = ?', (lookup_arg,)):
-            result.append(cls._cache.get(row[0]))
-        return result
+    def _(cls, lookup_arg: str):
+        resultset = [row[0] for row in horsaga_db.execute(
+            'SELECT id FROM enchant WHERE name = ?', (lookup_arg,))]
+        return frozenset(cls._cache.get(id) for id in resultset)
 
     # TODO search by special skill or support skill name / ID
 
 Enchant.__module__ = __spec__.parent
 
-
-def _populate():
-    for row in horsaga_db.execute('SELECT id, name FROM enchant'):
-        _ = Enchant(**row)
-
-_populate()
+for row in horsaga_db.execute('SELECT id, name FROM enchant'):
+    _ = Enchant(**row)

@@ -13,7 +13,7 @@ from ._base import horsaga_db
 
 # TODO bonus attribute on each square,
 # but need to complete attribute flags first
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(slots=True, frozen=True, auto_attribs=True)
 class Formation:
     _cache: ClassVar[Dict[int, Formation]] = {}
     id: int
@@ -47,8 +47,5 @@ class Formation:
 
 Formation.__module__ = __spec__.parent
 
-def _populate():
-    for row in horsaga_db.execute('SELECT * FROM formation'):
-        _ = Formation(**row) # Accessible via Formation.lookup()
-
-_populate
+for row in horsaga_db.execute('SELECT * FROM formation'):
+    _ = Formation(**row) # Accessible via Formation.lookup()
