@@ -34,4 +34,11 @@ jobs:
 
     - name: Test with wheel artifact
       shell: bash # glob fails on Windows cmd
-      run: tox --installpkg *.whl -v
+      run: tox --installpkg *.whl --result-json test-job-${{ strategy.job-index }}.json -v
+
+    - name: Upload log artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: log
+        path: test-job-*.json
+        if-no-files-found: error
