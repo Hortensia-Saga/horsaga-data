@@ -467,6 +467,7 @@ id,code,name,desc
 127203,DF_UP_ATTACK_CROSS_AT,地幻氷の縦十字／絶,十字型攻撃[大]自分の防御力UP[大]
 127204,DF_UP_ATTACK_CROSS_AT,地幻氷の縦十字／煌,十字型攻撃[特大]自分の防御力UP[特大]
 127205,DF_UP_ATTACK_CROSS_AT,地幻氷の縦十字／鳳,十字型攻撃[極大]自分の防御力UP[極大]
+127206,DF_UP_ATTACK_CROSS_AT,地幻氷の縦十字／冥,十字型攻撃[超極大]自分の防御力UP[超極大]
 127301,DF_UP_ATTACK_CROSS_X_AT,地幻光の交叉線,X字型攻撃[小]自分の防御力UP[小]
 127302,DF_UP_ATTACK_CROSS_X_AT,地幻光の交叉線／真,X字型攻撃[中]自分の防御力UP[中]
 127303,DF_UP_ATTACK_CROSS_X_AT,地幻光の交叉線／絶,X字型攻撃[大]自分の防御力UP[大]
