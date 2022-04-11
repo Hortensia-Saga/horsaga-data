@@ -11,6 +11,7 @@ import attr
 
 from ._base import horsaga_db
 
+
 # TODO bonus attribute on each square,
 # but need to complete attribute flags first
 @attr.s(slots=True, frozen=True, auto_attribs=True)

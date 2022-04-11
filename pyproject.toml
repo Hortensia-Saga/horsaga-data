@@ -63,3 +63,7 @@ testpaths = [
 
 [tool.pyright]
 ignore = ["data_mining"]
+
+[tool.isort]
+profile = 'black'
+combine_as_imports = true

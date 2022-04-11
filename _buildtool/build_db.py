@@ -2,10 +2,10 @@
 # Generates sqlite3 database for Hortensia Saga data
 #
 
-import sqlite3
 import csv
+import sqlite3
 
-from _common import SRC_DIR, RAW_DATA_DIR
+from _common import RAW_DATA_DIR, SRC_DIR
 
 DB_FILE_NAME = 'horsaga.sqlite3'
 DB_BACKUP_NAME = DB_FILE_NAME + '.bak'

@@ -1,7 +1,7 @@
 import csv
 
-from horsaga import account, HorSaga
-from horsaga.data import horsaga_db, AtkAttr
+from horsaga import HorSaga, account
+from horsaga.data import AtkAttr, horsaga_db
 from horsaga.model.pagename import Page
 
 players = [HorSaga(ac, login=False) for ac in account.enumerate()]

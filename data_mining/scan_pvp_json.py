@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 
+
 def dir_walker(path: Path):
     for child in path.iterdir():
         if child.is_file():

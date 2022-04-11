@@ -5,11 +5,11 @@
 #
 
 import enum
-import pytest
 from collections import namedtuple
 
-from horsaga.data import EnumMultiValueMixin
+import pytest
 
+from horsaga.data import EnumMultiValueMixin
 
 _fields = namedtuple('_MyFields', ('attr1', 'attr2', 'attr3', 'attr4'))
 

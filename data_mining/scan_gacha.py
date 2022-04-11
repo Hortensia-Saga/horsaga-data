@@ -6,20 +6,19 @@
 # Note that character data and enchant data are absent.
 #
 
-from typing import Iterator, List
 from random import choice
+from typing import Iterator, List
 
-from lxml.html import document_fromstring
 from lxml.cssselect import CSSSelector
 from lxml.etree import XPath
-
+from lxml.html import document_fromstring
 from more_itertools.more import padded
 from more_itertools.recipes import take
 
 from horsaga import HorSaga, account
 from horsaga._parser import scrap_text
-from horsaga.model.url import CardImgUrl, TacticsIconUrl
 from horsaga.model.pagename import Page
+from horsaga.model.url import CardImgUrl, TacticsIconUrl
 
 # Card ID to be skipped, some may not be released yet or never did
 SKIPPED = (

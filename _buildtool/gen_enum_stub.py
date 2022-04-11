@@ -4,10 +4,10 @@
 
 import csv
 from io import StringIO
-from typing import NamedTuple, Optional, Tuple
 from textwrap import dedent
+from typing import NamedTuple, Optional, Tuple
 
-from _common import SRC_DIR, RAW_DATA_DIR
+from _common import RAW_DATA_DIR, SRC_DIR
 
 FILENAME = SRC_DIR / '_enum_members.pyi'
 

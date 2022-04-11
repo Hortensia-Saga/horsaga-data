@@ -2,10 +2,11 @@
 # Test: lookup() methods of various structure
 #
 
-import pytest
 import re
 
-from horsaga.data import Enchant, Formation, Skill, Tactic, Character, CardBase
+import pytest
+
+from horsaga.data import CardBase, Character, Enchant, Formation, Skill, Tactic
 
 
 @pytest.mark.parametrize(('lookup_arg', 'expected'), [
