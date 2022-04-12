@@ -70,3 +70,6 @@ exclude = [
 [tool.isort]
 profile = 'black'
 combine_as_imports = true
+
+[tool.black]
+skip-string-normalization = true
