@@ -26,6 +26,7 @@ class SpeedRank(EnumMultiValueMixin, _fields, enum.Enum):
         SpeedRank[row['code'].translate(_rank_tr)] = tuple(row)
 
     if TYPE_CHECKING:
+
         @property
         def code(self) -> str:
             ...
