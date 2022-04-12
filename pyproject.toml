@@ -62,7 +62,10 @@ testpaths = [
 ]
 
 [tool.pyright]
-ignore = ["data_mining"]
+exclude = [
+    'data_mining',
+    '.tox',
+]
 
 [tool.isort]
 profile = 'black'
