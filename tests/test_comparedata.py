@@ -6,12 +6,14 @@ from horsaga.data import CardBase
 
 
 def test_comparedata(gacha_data):
-    ids_from_db = {i for i in CardBase._cache.keys() if i < 5000}
+    cache = CardBase.cache()
+    ids_from_db = {i for i in cache.keys() if i < 5000}
     assert ids_from_db == gacha_data.keys()
 
     for id in ids_from_db:
         # assemble rows from our data
         card = CardBase.lookup(id)
+        assert card is not None
         my_row = [
             card.rare.name,
             card.bp,
