@@ -47,11 +47,18 @@ jobs:
 
       - name: isort formatting
         uses: isort/isort-action@master
-        continue-on-error: true
+        id: step_isort
 
       - name: black formatting
+        if: success() || failure()
         uses: psf/black@stable
-        continue-on-error: true
+        id: step_black
+
+      - name: Checkers don't affect workflow status
+        if: >
+          steps.step_isort.outcome == 'failure' ||
+          steps.step_black.outcome == 'failure'
+        run: exit 0
 
   test:
     name: Tox tests
