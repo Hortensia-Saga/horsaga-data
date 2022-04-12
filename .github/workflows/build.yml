@@ -1,18 +1,18 @@
-name: Build and release
+name: Build and test
 
 on:
-  pull_request:
-    branches:
-    - master
   push:
+    branches:
+      - 'master'
     paths-ignore:
-      - '.gitignore'
-      - '*.rst'
-      - 'data_mining/'
+      - '.git*'
+      - '**.rst'
+      - 'data_mining/**'
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    name: Build Packages
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -34,21 +34,56 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-  release:
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: build
+  format:
+    name: Formatting checks
     runs-on: ubuntu-latest
     steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: dist
+      - uses: actions/checkout@v3
 
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        fail_on_unmatched_files: true
-        draft: true
-        files: |
-          *.whl
-          *.tar.gz
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: isort formatting
+        uses: isort/isort-action@master
+        continue-on-error: true
+
+      - name: black formatting
+        uses: psf/black@stable
+        continue-on-error: true
+
+  test:
+    name: Tox tests
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        python: ['3.8', '3.9', '3.10']
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Install dependencies
+        run: pip install -v tox
+
+      - name: Test wheel
+        shell: bash # glob fails on Windows cmd
+        run: tox --installpkg *.whl --result-json test-job-${{ strategy.job-index }}.json -v
+
+      - name: Upload log
+        uses: actions/upload-artifact@v3
+        with:
+          name: log
+          path: test-job-*.json
+          if-no-files-found: error
