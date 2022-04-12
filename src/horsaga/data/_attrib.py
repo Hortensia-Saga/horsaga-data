@@ -29,6 +29,7 @@ class AtkAttr(EnumMultiValueMixin, EnumRegexMixin, _fields, enum.Enum):
     if TYPE_CHECKING:
         @property
         def kanji(self) -> str: ...
+        def __setitem__(self, __k, __v): ...  # for pyright
 
     def __repr__(self) -> str:
         return f'<{type(self).__qualname__}.{self.name}: {self.kanji}>'
