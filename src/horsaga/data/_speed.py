@@ -26,12 +26,20 @@ class SpeedRank(EnumMultiValueMixin, _fields, enum.Enum):
         SpeedRank[row['code'].translate(_rank_tr)] = tuple(row)
 
     if TYPE_CHECKING:
+
         @property
-        def code(self) -> str: ...
+        def code(self) -> str:
+            ...
+
         @property
-        def value(self) -> str: ...
+        def value(self) -> str:
+            ...
+
+        def __setitem__(self, __k, __v):
+            ...  # for pyright
 
     def __repr__(self) -> str:
         return f'<{type(self).__qualname__}:{self.code} ({self.value})>'
+
 
 SpeedRank.__module__ = __spec__.parent

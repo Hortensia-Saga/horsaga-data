@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import functools
+from types import MappingProxyType
 from typing import ClassVar, Dict
 
 import attr
@@ -24,6 +25,10 @@ class Character:
 
     def __attrs_post_init__(self):
         type(self)._cache[self.id] = self
+
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Character]:
+        return MappingProxyType(cls._cache)
 
     @functools.singledispatchmethod
     @classmethod

@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import enum
 import functools
+from types import MappingProxyType
 from typing import ClassVar, Dict, Tuple
 
 import attr
@@ -58,6 +59,10 @@ class CardBase:
 
     def __attrs_post_init__(self):
         type(self)._cache[self.id] = self
+
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, CardBase]:
+        return MappingProxyType(cls._cache)
 
     @functools.singledispatchmethod
     @classmethod

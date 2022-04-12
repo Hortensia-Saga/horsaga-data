@@ -33,10 +33,16 @@ class PartyRank(EnumMultiValueMixin, _fields, enum.Enum):
             type(self)._value2member_map_[arg] = self
 
     if TYPE_CHECKING:
+
         @property
-        def code(self) -> str: ...
+        def code(self) -> str:
+            ...
+
+        def __setitem__(self, __k, __v):
+            ...  # for pyright
 
     def __repr__(self) -> str:
         return f'<{type(self).__qualname__}:{self.code}>'
+
 
 PartyRank.__module__ = __spec__.parent

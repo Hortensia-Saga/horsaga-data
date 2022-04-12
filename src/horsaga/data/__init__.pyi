@@ -4,6 +4,7 @@
 
 import enum
 import sqlite3
+from types import MappingProxyType
 from typing import Optional, Pattern, Type, TypeVar, overload
 
 import attr
@@ -29,6 +30,8 @@ class EnumMultiValueMixin:
 class Enchant:
     id: int
     name: str
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Enchant]: ...
     @overload
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
@@ -42,6 +45,8 @@ class Formation:
     name: str
     desc: str
     type: int
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Formation]: ...
     @overload
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
@@ -55,6 +60,8 @@ class Skill:
     code: str
     name: str
     desc: str
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Skill]: ...
     @overload
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
@@ -72,6 +79,8 @@ class Tactic:
     name: str
     desc: str
     tp_cost: int
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Tactic]: ...
     @overload
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
@@ -87,6 +96,8 @@ class Character:
     id: int
     name: str
     attr: AtkAttr
+    @classmethod
+    def cache(cls) -> MappingProxyType[int, Character]: ...
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
@@ -113,6 +124,8 @@ class CardBase:
     enchant: Enchant
     kn_skill: Skill
     @classmethod
+    def cache(cls) -> MappingProxyType[int, CardBase]: ...
+    @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
 # isort: off
@@ -122,4 +135,5 @@ from ._enum_members import (
     PartyRank as PartyRank,
     SpeedRank as SpeedRank,
 )
+
 # isort: on
