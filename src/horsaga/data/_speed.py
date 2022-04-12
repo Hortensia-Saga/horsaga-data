@@ -13,8 +13,10 @@ _table = 'rank'
 _field_names = ('value', 'code')
 _fields = namedtuple('_SpeedRank_Fields', _field_names)
 
+
 class SpeedRank(EnumMultiValueMixin, _fields, enum.Enum):
     """Code and value representing unit speed"""
+
     _ignore_ = ['SpeedRank', 'row', '_rank_tr']
 
     # Symbols not acceptable as enum member name

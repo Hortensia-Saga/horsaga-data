@@ -128,12 +128,9 @@ class CardBase:
     @classmethod
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
-# isort: off
 from ._enum_members import (
-    AtkAttr   as AtkAttr,
-    Rarity    as Rarity,
+    AtkAttr as AtkAttr,
     PartyRank as PartyRank,
+    Rarity as Rarity,
     SpeedRank as SpeedRank,
 )
-
-# isort: on

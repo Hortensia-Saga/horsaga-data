@@ -28,7 +28,9 @@ class CardBaseFlag(enum.Flag):
     def __repr__(self) -> str:
         return f'<{type(self).__name__}.{self._name_}>'
 
+
 CardBaseFlag.__module__ = __spec__.parent
+
 
 @attr.s(slots=True, frozen=True, auto_attribs=True)
 class CardBase:
@@ -42,20 +44,23 @@ class CardBase:
     bp: int
     rare: Rarity = attr.field(converter=Rarity)
     chara: Character = attr.field(
-        converter=lambda x: None if x is None else Character.lookup(x))
+        converter=lambda x: None if x is None else Character.lookup(x)
+    )
     flag: CardBaseFlag = attr.field(converter=CardBaseFlag)
     skill: Skill = attr.field(
-        converter=lambda x: None if x is None else Skill.lookup(x))
-    uf: Skill = attr.field(
-        converter=lambda x: None if x is None else Skill.lookup(x))
+        converter=lambda x: None if x is None else Skill.lookup(x)
+    )
+    uf: Skill = attr.field(converter=lambda x: None if x is None else Skill.lookup(x))
     tactic: Tuple[Tactic, ...]
     enchant: Enchant = attr.field(
-        converter=lambda x: None if x is None else Enchant.lookup(x))
+        converter=lambda x: None if x is None else Enchant.lookup(x)
+    )
     kn_skill: Skill = attr.field(
-        converter=lambda x: None if x is None else Skill.lookup(x))
+        converter=lambda x: None if x is None else Skill.lookup(x)
+    )
 
     def __str__(self) -> str:
-        return (f'<{type(self).__name__} {self.id} ({self.title})>')
+        return f'<{type(self).__name__} {self.id} ({self.title})>'
 
     def __attrs_post_init__(self):
         type(self)._cache[self.id] = self
@@ -72,8 +77,9 @@ class CardBase:
     # BUG @register failed to read annotation from function signature
     @lookup.register(int)
     @classmethod
-    def _(cls, lookup_arg: int): # search by ID
+    def _(cls, lookup_arg: int):  # search by ID
         return cls._cache.get(lookup_arg)
+
 
 CardBase.__module__ = __spec__.parent
 
@@ -82,7 +88,7 @@ for row in horsaga_db.execute('SELECT * FROM cardbase'):
     kwds = dict(row)
     tactic_list = []
     for key in ('tactic1', 'tactic2'):
-        if (tid := kwds.pop(key)):
+        if tid := kwds.pop(key):
             tactic_list.append(Tactic.lookup(tid))
     kwds['tactic'] = tuple(tactic_list)
     _ = CardBase(**kwds)

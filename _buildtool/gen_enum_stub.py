@@ -11,12 +11,14 @@ from _common import RAW_DATA_DIR, SRC_DIR
 
 FILENAME = SRC_DIR / '_enum_members.pyi'
 
+
 class _EnumDefs(NamedTuple):
     filename: str
     cls_name: str
     use_regex_mixin: bool
-    props: Optional[Tuple[str, ...]] # None = all fields are used
-    member_name: Optional[str] # None = no member listing
+    props: Optional[Tuple[str, ...]]  # None = all fields are used
+    member_name: Optional[str]  # None = no member listing
+
 
 tbls = [
     _EnumDefs(
@@ -64,6 +66,7 @@ def get_header() -> str:
     """
     return dedent(header)
 
+
 def get_enum_stub(data: _EnumDefs) -> str:
     # StringIO + context manager proposal is rejected (bpo-43834)
     output = StringIO()
@@ -73,12 +76,11 @@ def get_enum_stub(data: _EnumDefs) -> str:
     inherited = ['enum.Enum']
     if data.use_regex_mixin:
         inherited.insert(0, 'EnumRegexMixin')
-    output.write('\nclass {}({}):\n'.format(
-        data.cls_name,
-        ', '.join(inherited)
-    ))
+    output.write('\nclass {}({}):\n'.format(data.cls_name, ', '.join(inherited)))
 
-    with open(RAW_DATA_DIR / data.filename, mode='r', newline='', encoding='utf-8') as f:
+    with open(
+        RAW_DATA_DIR / data.filename, mode='r', newline='', encoding='utf-8'
+    ) as f:
         reader = csv.DictReader(f)
         # write members
         if data.member_name:
@@ -88,21 +90,26 @@ def get_enum_stub(data: _EnumDefs) -> str:
         # write fake properties
         fieldnames = data.props if data.props else reader.fieldnames
         for field in fieldnames:
+            # fmt: off
             if ( # OK this is cheating
                 field == 'value' or
                 field.startswith('min_') or
-                field.startswith('max_')):
+                field.startswith('max_')
+            ): # fmt: on
                 type_ = 'int'
             else:
                 type_ = 'str'
+            # fmt: off
             output.write(
                 f'{indent}@property\n'
                 f'{indent}def {field}(self) -> {type_}: ...\n'
             )
+            # fmt: on
 
     content = output.getvalue()
     output.close()
     return content
+
 
 #
 # The real thing

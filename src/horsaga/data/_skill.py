@@ -37,35 +37,43 @@ class Skill:
         raise TypeError(f'Lookup argument type {type(lookup_arg)} not supported')
 
     # BUG @register failed to read annotation from function signature
-    @lookup.register(int) # by exact ID
+    @lookup.register(int)  # by exact ID
     @classmethod
     def _(cls, lookup_arg: int):
         return cls._cache.get(lookup_arg)
 
-    @lookup.register(str) # by exact name or code
+    @lookup.register(str)  # by exact name or code
     @classmethod
     def _(cls, lookup_arg: str):
-        resultset = [row[0] for row in horsaga_db.execute(
-            'SELECT id FROM skill WHERE name = ? OR code = ?',
-            (lookup_arg, lookup_arg))]
+        resultset = [
+            row[0]
+            for row in horsaga_db.execute(
+                'SELECT id FROM skill WHERE name = ? OR code = ?',
+                (lookup_arg, lookup_arg),
+            )
+        ]
         # though name is unique, code isn't
         return frozenset(cls._cache.get(id) for id in resultset)
 
-    @lookup.register(re.Pattern) # by name/desc/code regex
+    @lookup.register(re.Pattern)  # by name/desc/code regex
     @classmethod
     def _(cls, lookup_arg: re.Pattern):
         # Python sqlite3 module does not support loadable extension
         # by default. Thus search without SQL -- a bit expensive though.
         return frozenset(
-            obj for obj in cls._cache.values()
-            if (lookup_arg.search(obj.name) or
-                lookup_arg.search(obj.code or '') or # FIXME no code for ディアーブル・レヨン
-                lookup_arg.search(obj.desc))
+            obj
+            for obj in cls._cache.values()
+            if (
+                lookup_arg.search(obj.name)
+                or lookup_arg.search(obj.code or '')
+                or lookup_arg.search(obj.desc)  # FIXME no code for ディアーブル・レヨン
+            )
         )
+
 
 Skill.__module__ = __spec__.parent
 
 
 # TODO Think about replacing sqlite3 row_factory temporarily
 for row in horsaga_db.execute('SELECT * FROM skill'):
-    _ = Skill(**row) # Accessible via Skill.lookup()
+    _ = Skill(**row)  # Accessible via Skill.lookup()

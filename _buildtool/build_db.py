@@ -129,12 +129,14 @@ db_schema = {
     ''',
 }
 
+
 def do_backup(file_loc, backup_loc):
     backup_loc.unlink(missing_ok=True)
     try:
         file_loc.rename(backup_loc)
     except FileNotFoundError:
         pass
+
 
 def build(*, backup: bool = False):
     bkfile = SRC_DIR / DB_BACKUP_NAME
@@ -159,8 +161,8 @@ def build(*, backup: bool = False):
             reader = csv.reader(file)
             row_size = len(next(reader))
             insert_st = 'INSERT INTO "{}" VALUES ({})'.format(
-                tbl_name,
-                ', '.join(['?'] * row_size))
+                tbl_name, ', '.join(['?'] * row_size)
+            )
 
             for row in reader:
                 # csv reader produce string-only result, need conversion
@@ -184,9 +186,12 @@ def build(*, backup: bool = False):
             # corresponding character data discovered yet. Hopefully
             # this section can be removed in future
             if tbl_name == 'chara':
-                data = [(i*1000, '', i) for i in range(1, 5)]
-                con.executemany('INSERT INTO "chara" (id, name, attr) VALUES (?, ?, ?)', data)
+                data = [(i * 1000, '', i) for i in range(1, 5)]
+                con.executemany(
+                    'INSERT INTO "chara" (id, name, attr) VALUES (?, ?, ?)', data
+                )
 
     con.close()
+
 
 build()

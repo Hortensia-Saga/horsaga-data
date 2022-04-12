@@ -37,21 +37,26 @@ class Formation:
 
     @lookup.register(int)
     @classmethod
-    def _(cls, lookup_arg: int): # search by ID
+    def _(cls, lookup_arg: int):  # search by ID
         return cls._cache.get(lookup_arg)
 
     @lookup.register(str)
     @classmethod
-    def _(cls, lookup_arg: str): # search by name
-        resultset = [row[0] for row in horsaga_db.execute(
-            'SELECT id FROM formation WHERE name = ?', (lookup_arg,))]
+    def _(cls, lookup_arg: str):  # search by name
+        resultset = [
+            row[0]
+            for row in horsaga_db.execute(
+                'SELECT id FROM formation WHERE name = ?', (lookup_arg,)
+            )
+        ]
         # formation sheet names guaranteed unique in DB
         if len(resultset):
             return cls._cache.get(resultset[0])
 
     # TODO search sheet by formation type
 
+
 Formation.__module__ = __spec__.parent
 
 for row in horsaga_db.execute('SELECT * FROM formation'):
-    _ = Formation(**row) # Accessible via Formation.lookup()
+    _ = Formation(**row)  # Accessible via Formation.lookup()

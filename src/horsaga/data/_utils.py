@@ -35,11 +35,12 @@ class EnumRegexMixin(enum.Enum):
             if not (v := getattr(e, attr)) or not isinstance(v, str):
                 continue
             if len(v) != 1:
-                raise ValueError(f'Attribute "{attr}" '
-                    f'of member {e!r} contains multiple char')
+                raise ValueError(
+                    f'Attribute "{attr}" ' f'of member {e!r} contains multiple char'
+                )
             values.append(v)
 
-        return ('[{}]'.format("".join(re.escape(v) for v in values)))
+        return '[{}]'.format("".join(re.escape(v) for v in values))
 
 
 class EnumMultiValueMixin(enum.Enum):
@@ -64,19 +65,22 @@ class EnumMultiValueMixin(enum.Enum):
     Once these arguments are used, Python 3.9.2+ becomes a hard requirement;
     otherwise python version restriction does not apply.
     """
+
     def __init_subclass__(
-        cls, /,
+        cls,
+        /,
         lookup_enable: Iterable[str] = None,
         lookup_disable: Iterable[str] = None,
-        **kwds
+        **kwds,
     ) -> None:
         super().__init_subclass__(**kwds)
         lookup_enable = set(lookup_enable) if lookup_enable else set()
         lookup_disable = set(lookup_disable) if lookup_disable else set()
         if len(lookup_enable):
             if len(lookup_disable):
-                raise ValueError('lookup_enable and lookup_disable '
-                    'must not be used together')
+                raise ValueError(
+                    'lookup_enable and lookup_disable must not be used together'
+                )
             lookup_dict = defaultdict(lambda: False)
             for fname in lookup_enable:
                 lookup_dict[fname] = True
@@ -85,7 +89,6 @@ class EnumMultiValueMixin(enum.Enum):
             for fname in lookup_disable:
                 lookup_dict[fname] = False
         cls._field_in_lookup = lookup_dict
-
 
     def __init__(self, *args):
         super().__init__()
@@ -96,7 +99,6 @@ class EnumMultiValueMixin(enum.Enum):
             return
         me = self._value_._asdict()
         in_lookup = type(self)._field_in_lookup
-        accepted_vals = [v for k, v in me.items()
-            if in_lookup[k]]
+        accepted_vals = [v for k, v in me.items() if in_lookup[k]]
         for v in accepted_vals:
             type(self)._value2member_map_[v] = self

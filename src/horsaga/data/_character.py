@@ -17,6 +17,7 @@ from ._base import horsaga_db
 @attr.s(slots=True, frozen=True, auto_attribs=True)
 class Character:
     """Character data shared (potentially) across multiple cards"""
+
     _cache: ClassVar[Dict[int, Character]] = {}
     id: int
     name: str
@@ -38,11 +39,12 @@ class Character:
     # BUG @register failed to read annotation from function signature
     @lookup.register(int)
     @classmethod
-    def _(cls, lookup_arg: int): # search by ID
+    def _(cls, lookup_arg: int):  # search by ID
         return cls._cache.get(lookup_arg)
+
 
 Character.__module__ = __spec__.parent
 
 
 for row in horsaga_db.execute('SELECT id, name, attr FROM chara'):
-    _ = Character(**row) # Accessible via Character.lookup()
+    _ = Character(**row)  # Accessible via Character.lookup()

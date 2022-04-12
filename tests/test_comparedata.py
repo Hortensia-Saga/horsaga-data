@@ -32,7 +32,7 @@ def test_comparedata(gacha_data):
                 my_row[2] += card.chara.name
 
         for attr_name in ['skill', 'uf']:
-            if (attr := getattr(card, attr_name)):
+            if attr := getattr(card, attr_name):
                 my_row.extend([attr.name, attr.desc])
             else:
                 my_row.extend([None, None])
@@ -52,5 +52,5 @@ def test_comparedata(gacha_data):
 
         gacha_row = gacha_data[id]
         # Data retrieval still unfinished, we skip some fields
-        _ = gacha_row.pop(0) # attr
+        _ = gacha_row.pop(0)  # attr
         assert my_row == gacha_row

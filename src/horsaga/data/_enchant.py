@@ -16,6 +16,7 @@ from ._base import horsaga_db
 @attr.s(slots=True, frozen=True, auto_attribs=True)
 class Enchant:
     """Enchant data"""
+
     _cache: ClassVar[Dict[int, Enchant]] = {}
     id: int
     name: str
@@ -33,19 +34,24 @@ class Enchant:
     def lookup(cls, lookup_arg):
         raise TypeError(f'Lookup argument type {type(lookup_arg)} not supported')
 
-    @lookup.register(int) # by ID
+    @lookup.register(int)  # by ID
     @classmethod
     def _(cls, lookup_arg: int):
         return cls._cache.get(lookup_arg)
 
-    @lookup.register(str) # by name
+    @lookup.register(str)  # by name
     @classmethod
     def _(cls, lookup_arg: str):
-        resultset = [row[0] for row in horsaga_db.execute(
-            'SELECT id FROM enchant WHERE name = ?', (lookup_arg,))]
+        resultset = [
+            row[0]
+            for row in horsaga_db.execute(
+                'SELECT id FROM enchant WHERE name = ?', (lookup_arg,)
+            )
+        ]
         return frozenset(cls._cache.get(id) for id in resultset)
 
     # TODO search by special skill or support skill name / ID
+
 
 Enchant.__module__ = __spec__.parent
 

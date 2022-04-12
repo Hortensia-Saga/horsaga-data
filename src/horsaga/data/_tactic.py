@@ -41,32 +41,41 @@ class Tactic:
         raise TypeError(f'Lookup argument type {type(lookup_arg)} not supported')
 
     # BUG @register failed to read annotation from function signature
-    @lookup.register(int) # by ID
+    @lookup.register(int)  # by ID
     @classmethod
     def _(cls, lookup_arg: int):
         return cls._cache.get(lookup_arg)
 
-    @lookup.register(str) # by name/code
+    @lookup.register(str)  # by name/code
     @classmethod
     def _(cls, lookup_arg: str):
-        resultset = [row[0] for row in horsaga_db.execute(
-            'SELECT id FROM tactic WHERE name = ? OR code = ?',
-            (lookup_arg, lookup_arg))]
+        resultset = [
+            row[0]
+            for row in horsaga_db.execute(
+                'SELECT id FROM tactic WHERE name = ? OR code = ?',
+                (lookup_arg, lookup_arg),
+            )
+        ]
         # though name is unique, code isn't
         return frozenset(cls._cache.get(id) for id in resultset)
 
-    @lookup.register(re.Pattern) # by name/desc/code regex
+    @lookup.register(re.Pattern)  # by name/desc/code regex
     @classmethod
     def _(cls, lookup_arg: re.Pattern):
         # Python sqlite3 module does not support loadable extension
         # by default. Thus search without SQL -- a bit expensive though.
         return frozenset(
-            obj for obj in cls._cache.values()
-            if (lookup_arg.search(obj.name) or
-                lookup_arg.search(obj.code) or
-                lookup_arg.search(obj.desc)))
+            obj
+            for obj in cls._cache.values()
+            if (
+                lookup_arg.search(obj.name)
+                or lookup_arg.search(obj.code)
+                or lookup_arg.search(obj.desc)
+            )
+        )
+
 
 Tactic.__module__ = __spec__.parent
 
 for row in horsaga_db.execute('SELECT * FROM tactic'):
-    _ = Tactic(**row) # Accessible via Tactic.lookup()
+    _ = Tactic(**row)  # Accessible via Tactic.lookup()

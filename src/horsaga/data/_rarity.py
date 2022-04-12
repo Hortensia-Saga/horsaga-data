@@ -10,10 +10,12 @@ from ._base import horsaga_db
 from ._utils import EnumMultiValueMixin
 
 _table = 'rarity'
-_field_names = [row[0]
-    for row in horsaga_db.execute(
-        f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')]
+_field_names = [
+    row[0]
+    for row in horsaga_db.execute(f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')
+]
 _fields = namedtuple('_Rarity_Fields', _field_names)
+
 
 class Rarity(EnumMultiValueMixin, _fields, enum.Enum):
     """Card rarity (N, R, SR etc) commonly seen in mobile games"""

@@ -10,13 +10,16 @@ from ._base import horsaga_db
 from ._utils import EnumMultiValueMixin
 
 _table = 'rank'
-_field_names = [row[0]
-    for row in horsaga_db.execute(
-        f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')]
+_field_names = [
+    row[0]
+    for row in horsaga_db.execute(f'SELECT name FROM PRAGMA_TABLE_INFO("{_table}")')
+]
 _fields = namedtuple('_PartyRank_Fields', _field_names)
+
 
 class PartyRank(EnumMultiValueMixin, _fields, enum.Enum):
     """Ranking for GVG or Quest party"""
+
     _ignore_ = ['PartyRank', 'row', '_rank_tr']
 
     # Symbols not acceptable as enum member name
@@ -29,7 +32,7 @@ class PartyRank(EnumMultiValueMixin, _fields, enum.Enum):
 
     def __init__(self, *args):
         super().__init__()
-        for arg in args[:2]: # reverse lookup on numeric value and code only
+        for arg in args[:2]:  # reverse lookup on numeric value and code only
             type(self)._value2member_map_[arg] = self
 
     if TYPE_CHECKING:

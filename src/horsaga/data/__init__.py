@@ -2,7 +2,7 @@
 # Export Horsaga database
 #
 # isort: skip_file
-#
+# fmt: off
 
 from ._base       import horsaga_db
 
@@ -22,3 +22,5 @@ from ._card       import CardBase
 
 # utils are useful down the stack as well
 from ._utils import EnumMultiValueMixin, EnumRegexMixin
+
+# fmt: on

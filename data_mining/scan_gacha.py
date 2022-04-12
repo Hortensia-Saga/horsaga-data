@@ -33,7 +33,7 @@ START = 2529
 END = 2537
 
 payload = {
-    'gcty': 'GOLD_10_FREE_FOR_CAMPAIGN', # Any valid param is fine
+    'gcty': 'GOLD_10_FREE_FOR_CAMPAIGN',  # Any valid param is fine
     'gccnt': '0',
     'gbucc': '450',
     'gccdo': 'true',
@@ -56,23 +56,25 @@ param_strs = [
     'prmSkillDetail2',
     'prmImgTac',
     'prmImgTac2',
-    'enchantName'
+    'enchantName',
 ]
 
 selectors = [CSSSelector('span.' + v) for v in param_strs]
 
 cards_xpath = XPath('//li[@data-id="gachaPopupCardDetail"]')
 
+
 def card_id_gen(start, end) -> Iterator[int]:
     for i in range(start, end):
         if i not in SKIPPED:
             yield i
 
+
 def gprcd_gen(start, end) -> Iterator[List[int]]:
 
     id_gen = card_id_gen(start, end)
 
-    while (grp := take(10, id_gen)):
+    while grp := take(10, id_gen):
         if len(grp) < 10:
             grp = list(padded(grp, grp[-1], 10))
         yield grp
@@ -87,9 +89,8 @@ with open('gacha_data.csv', 'a', newline=None) as f:
         payload['gprcd'] = ','.join(str(v) for v in gprcd)
 
         resp = player._ua.get(
-            Page('gacha', 'GachaResultPage'),
-            params=payload,
-            allow_redirects=False)
+            Page('gacha', 'GachaResultPage'), params=payload, allow_redirects=False
+        )
 
         tree = document_fromstring(resp.text)
         cards = cards_xpath(tree)

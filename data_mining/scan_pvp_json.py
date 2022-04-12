@@ -16,6 +16,7 @@ def dir_walker(path: Path):
             for item in dir_walker(child):
                 yield item
 
+
 result = {}
 
 for file in dir_walker(Path(sys.argv[1])):
@@ -34,8 +35,11 @@ for file in dir_walker(Path(sys.argv[1])):
             result[cid] = chid
         else:
             if result[cid] != chid:
-                print(f'WARNING: card {cid} was mapped to char {result[cid]}, '
-                    f'but {file} contains mapping to char {chid} instead', file=sys.stderr)
+                print(
+                    f'WARNING: card {cid} was mapped to char {result[cid]}, '
+                    f'but {file} contains mapping to char {chid} instead',
+                    file=sys.stderr,
+                )
 
 for k, v in result.items():
     print(f'{k}:{v}')
