@@ -1,0 +1,45 @@
+name: PR review
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.git*'
+      - '**.rst'
+      - 'data_mining/**'
+
+jobs:
+  reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: isort formatting
+        uses: isort/isort-action@master
+        id: action_isort
+        with:
+          configuration: ""
+
+      - name: black formatting
+        uses: rickstaa/action-black@v1
+        id: action_black
+        with:
+          black_args: "."
+
+      - name: Annotate diff changes using reviewdog
+        if: >
+          steps.action_black.outputs.is_formatted == 'true' ||
+          contains(steps.action_isort.isort-result, 'Fixing')
+        uses: reviewdog/action-suggester@v1
+
+      - name: pyright review
+        uses: jordemort/action-pyright@v1
+        with:
+          reporter: github-pr-review
+          level: warning
+          lib: true
