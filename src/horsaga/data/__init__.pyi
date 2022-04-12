@@ -135,4 +135,5 @@ from ._enum_members import (
     PartyRank as PartyRank,
     SpeedRank as SpeedRank,
 )
+
 # isort: on

@@ -27,11 +27,16 @@ class Rarity(EnumMultiValueMixin, _fields, enum.Enum):
         Rarity[row['code']] = tuple(row)
 
     if TYPE_CHECKING:
+
         @property
-        def value(self) -> int: ...
-        def __setitem__(self, __k, __v): ...  # for pyright
+        def value(self) -> int:
+            ...
+
+        def __setitem__(self, __k, __v):
+            ...  # for pyright
 
     def __repr__(self) -> str:
         return f'<{type(self).__qualname__}.{self.name}: {self.value}>'
+
 
 Rarity.__module__ = __spec__.parent
