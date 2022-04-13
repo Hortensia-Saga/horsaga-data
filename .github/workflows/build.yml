@@ -2,12 +2,15 @@ name: Build and test
 
 on:
   push:
-    branches:
-      - 'master'
+    branches-ignore:
+      - 'dependabot/**'
     paths-ignore:
       - '.git*'
       - '**.rst'
       - 'data_mining/**'
+    tags:
+      - 0.*
+      - 1.*
 
 jobs:
   build:
