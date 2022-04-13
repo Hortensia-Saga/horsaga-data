@@ -1,5 +1,5 @@
 [build-system]
-requires = ["pdm-pep517"]
+requires = ["pdm-pep517 >= 0.12"]
 # Can't get PDM custom build step to include the DB file,
 # so this build backend wrapping would stay in foreseeable future
 build-backend = "pdm_pep517_adapter:api"
@@ -11,14 +11,13 @@ description="Hortensia Saga basic game data and constants"
 authors = [{name = "Abel Cheung", email = "abelcheung@gmail.com"}]
 requires-python = ">=3.8" # functools.singledispatchmethod
 dynamic = ["version"]
-license = {text = "MIT"}
+license-expression = 'MIT'
 keywords = ['hortensia', 'hortensia saga', 'horsaga']
 classifiers=[
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Topic :: Games/Entertainment",
     "Intended Audience :: Other Audience",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: SQL",
@@ -27,7 +26,6 @@ dependencies = ["attrs"]
 
 [project.urls]
 homepage = "https://github.com/Hortensia-Saga/horsaga.data"
-Source = "https://github.com/Hortensia-Saga/horsaga.data"
 
 [project.optional-dependencies]
 test = ["tox"]
@@ -49,11 +47,6 @@ source-includes = [
     "tests/",
     "tox.ini",
 ]
-
-[[tool.pdm.source]]
-name = "pypi"
-url = "https://pypi.org/simple"
-verify_ssl = true
 
 [tool.pytest.ini_options]
 addopts = "-v"
