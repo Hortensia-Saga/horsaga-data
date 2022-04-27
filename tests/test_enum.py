@@ -39,6 +39,10 @@ def test_partyrank_roundtrip():
         assert PartyRank(v) == e
 
 
+def test_ability_mat_presence():
+    from horsaga.data import AbilityMatType
+    assert len(list(AbilityMatType)) > 0
+
 #
 # Test: EnumRegexMixin works for AtkAttr
 #

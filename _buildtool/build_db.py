@@ -11,6 +11,11 @@ DB_FILE_NAME = 'horsaga.sqlite3'
 DB_BACKUP_NAME = DB_FILE_NAME + '.bak'
 
 db_schema = {
+    'ability_mat_type': '''
+        "gid"   INTEGER,
+        "type"  TEXT NOT NULL,
+        PRIMARY KEY("gid")
+    ''',
     'attack_attrib': '''
         "value"     INTEGER,
         "code"      TEXT NOT NULL,

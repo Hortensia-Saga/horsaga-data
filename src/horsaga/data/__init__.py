@@ -7,9 +7,10 @@
 from ._base       import horsaga_db
 
 # enums
+from ._ability_mat import AbilityMatType
 from ._attrib     import AtkAttr
-from ._rarity     import Rarity
 from ._partyrank  import PartyRank
+from ._rarity     import Rarity
 from ._speed      import SpeedRank
 
 # models

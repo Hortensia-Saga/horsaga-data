@@ -5,7 +5,7 @@
 import csv
 from io import StringIO
 from textwrap import dedent
-from typing import NamedTuple, Optional, Tuple
+from typing import Iterable, NamedTuple, Optional, Tuple, Union
 
 from _common import RAW_DATA_DIR, SRC_DIR
 
@@ -16,7 +16,7 @@ class _EnumDefs(NamedTuple):
     filename: str
     cls_name: str
     use_regex_mixin: bool
-    props: Optional[Tuple[str, ...]]  # None = all fields are used
+    props: Union[Tuple[str, ...], bool]  # True=all fields, False=no
     member_name: Optional[str]  # None = no member listing
 
 
@@ -25,14 +25,14 @@ tbls = [
         'attack_attrib.csv',
         'AtkAttr',
         True,
-        None,
+        True,
         'code',
     ),
     _EnumDefs(
         'rarity.csv',
         'Rarity',
         False,
-        None,
+        True,
         'code',
     ),
     _EnumDefs(
@@ -46,8 +46,15 @@ tbls = [
         'rank.csv',
         'PartyRank',
         False,
+        True,
         None,
-        None,
+    ),
+    _EnumDefs(
+        'ability_mat_type.csv',
+        'AbilityMatType',
+        True,
+        True,
+        'type',
     ),
 ]
 
@@ -89,23 +96,26 @@ def get_enum_stub(data: _EnumDefs) -> str:
                 output.write(f'{indent}{row[data.member_name]} = ...\n')
 
         # write fake properties
-        fieldnames = data.props if data.props else reader.fieldnames
+        fieldnames: Iterable[str] = (
+            data.props
+            if isinstance(data.props, tuple)
+            else reader.fieldnames
+            if data.props is True
+            else ()
+        )
         for field in fieldnames:
-            # fmt: off
-            if ( # OK this is cheating
-                field == 'value' or
-                field.startswith('min_') or
-                field.startswith('max_')
-            ): # fmt: on
+            if (  # FIXME reuse definitions in build_db.py
+                field == 'value'
+                or field.startswith('min_')
+                or field.startswith('max_')
+                or "id" in field
+            ):
                 type_ = 'int'
             else:
                 type_ = 'str'
-            # fmt: off
             output.write(
-                f'{indent}@property\n'
-                f'{indent}def {field}(self) -> {type_}: ...\n'
+                f'{indent}@property\n{indent}def {field}(self) -> {type_}: ...\n'
             )
-            # fmt: on
 
     content = output.getvalue()
     output.close()

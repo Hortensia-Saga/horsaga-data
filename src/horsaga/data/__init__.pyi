@@ -129,6 +129,7 @@ class CardBase:
     def lookup(cls: Type[_T], lookup_arg: int) -> Optional[_T]: ...
 
 from ._enum_members import (
+    AbilityMatType as AbilityMatType,
     AtkAttr as AtkAttr,
     PartyRank as PartyRank,
     Rarity as Rarity,
