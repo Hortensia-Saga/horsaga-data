@@ -19,6 +19,7 @@ def prepare_mem_db(file: Path) -> sqlite3.Connection:
     dest.execute('PRAGMA query_only = 1;')
     return dest
 
+
 db_file = Path(__file__).parent / 'horsaga.sqlite3'
 horsaga_db = prepare_mem_db(db_file)
 horsaga_db.row_factory = sqlite3.Row
