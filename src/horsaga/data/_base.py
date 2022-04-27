@@ -8,8 +8,17 @@ from urllib.parse import urlunsplit
 
 __all__ = ['horsaga_db']
 
-db_file = Path(__file__).parent / 'horsaga.sqlite3'
-db_uri = urlunsplit(('file', '', str(db_file), '', 'mode=ro'))
+# Create a memory copy of DB
+# If db file is kept open, package upgrade would cause trouble on Windows
+def prepare_mem_db(file: Path) -> sqlite3.Connection:
+    file_uri = urlunsplit(('file', '', str(file), '', 'mode=ro'))
+    src = sqlite3.connect(file_uri, uri=True)
+    dest = sqlite3.connect(':memory:')
+    src.backup(dest)
+    src.close()
+    dest.execute('PRAGMA query_only = 1;')
+    return dest
 
-horsaga_db = sqlite3.connect(db_uri, uri=True)
+db_file = Path(__file__).parent / 'horsaga.sqlite3'
+horsaga_db = prepare_mem_db(db_file)
 horsaga_db.row_factory = sqlite3.Row
