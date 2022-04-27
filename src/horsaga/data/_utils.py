@@ -5,7 +5,7 @@
 import enum
 import re
 from collections import defaultdict
-from typing import Iterable
+from typing import DefaultDict, Iterable
 
 
 class EnumRegexMixin(enum.Enum):
@@ -69,8 +69,8 @@ class EnumMultiValueMixin(enum.Enum):
     def __init_subclass__(
         cls,
         /,
-        lookup_enable: Iterable[str] = None,
-        lookup_disable: Iterable[str] = None,
+        lookup_enable: Iterable[str] = set(),
+        lookup_disable: Iterable[str] = set(),
         **kwds,
     ) -> None:
         super().__init_subclass__(**kwds)
@@ -88,17 +88,18 @@ class EnumMultiValueMixin(enum.Enum):
             lookup_dict = defaultdict(lambda: True)
             for fname in lookup_disable:
                 lookup_dict[fname] = False
-        cls._field_in_lookup = lookup_dict
+        setattr(cls, '_field_in_lookup', lookup_dict)
 
     def __init__(self, *args):
         super().__init__()
-        if getattr(type(self), '_field_in_lookup', None) is None:
+        try:
+            in_lookup: DefaultDict[str, bool] = getattr(type(self), '_field_in_lookup')
+        except AttributeError:
             # Py < 3.9.2, where __init_subclass__ is not called
             for arg in args:
                 type(self)._value2member_map_[arg] = self
             return
         me = self._value_._asdict()
-        in_lookup = type(self)._field_in_lookup
         accepted_vals = [v for k, v in me.items() if in_lookup[k]]
         for v in accepted_vals:
             type(self)._value2member_map_[v] = self

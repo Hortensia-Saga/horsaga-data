@@ -82,6 +82,7 @@ def get_enum_stub(data: _EnumDefs) -> str:
         RAW_DATA_DIR / data.filename, mode='r', newline='', encoding='utf-8'
     ) as f:
         reader = csv.DictReader(f)
+        assert reader.fieldnames is not None
         # write members
         if data.member_name:
             for row in reader:
