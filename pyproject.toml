@@ -34,6 +34,7 @@ test = ["tox"]
 version = {use_scm = true}
 excludes = [
     "**/*.bak",
+    "**/__pycache__",
     "data_mining/",
 ]
 # horsaga/__init__.py in this module is present only for discovering
